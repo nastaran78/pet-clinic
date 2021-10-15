@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 @RunWith(Theories.class)
-public class OwnerTest {
+public class OwnerPetTest {
 
 	public static Pet pet;
 	public static Owner owner;
