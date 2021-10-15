@@ -160,8 +160,15 @@ class OwnerTest {
 		List<Pet> sortedPets = createFiveCatsSortedWithName();
 		Objects.requireNonNull(getPrivateFiled(george, "pets")).set(george, new HashSet<>(sortedPets));
 		assertArrayEquals(sortedPets.toArray(), george.getPets().toArray());
+	}
+
+	@Test
+	void testGetter_getPetsException() throws IllegalAccessException {
+		List<Pet> sortedPets = createFiveCatsSortedWithName();
+		Objects.requireNonNull(getPrivateFiled(george, "pets")).set(george, new HashSet<>(sortedPets));
 		assertThrows(UnsupportedOperationException.class, () -> {george.getPets().add(new Pet());});
 	}
+
 
 	private Owner createNewOwner() {
 		Owner william = new Owner();
