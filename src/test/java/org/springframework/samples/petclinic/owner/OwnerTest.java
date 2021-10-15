@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 
 import java.util.*;
 
+import static org.junit.Assume.assumeNotNull;
 import static org.junit.Assume.assumeTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -32,7 +33,7 @@ public class OwnerTest {
 	@Theory
 	public void petNameExists(Set<String> dataset, String name) {
 
-		assumeTrue(dataset != null);
+		assumeNotNull(dataset);
 		assumeTrue(dataset.contains(name) || dataset.contains(name.toLowerCase()));
 		List<String> datalist = new ArrayList<>(dataset);
 		List<Pet> pets = new ArrayList<>();
@@ -42,8 +43,7 @@ public class OwnerTest {
 			pet.setName(s);
 			pets.add(pet);
 		}
-		Set<Pet> petsSet = new HashSet<>(pets);
-		owner.setPetsInternal(petsSet);
+		owner.setPetsInternal(new HashSet<>(pets));
 		pet = owner.getPet(name, false);
 
 		assertNotNull(pet);
