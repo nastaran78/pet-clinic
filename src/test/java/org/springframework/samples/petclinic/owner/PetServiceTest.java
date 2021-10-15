@@ -2,12 +2,9 @@ package org.springframework.samples.petclinic.owner;
 
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -15,12 +12,11 @@ import java.util.stream.Stream;
 
 
 @SpringBootTest
-//@RunWith(Parameterized.class)
 public class PetServiceTest {
 
-	public static Pet pet1 , pet2 , pet;
-	public Owner owner1 , owner2;
-	public PetType petType1 ,petType2;
+	public static Pet pet1, pet2, pet;
+	public Owner owner1, owner2;
+	public PetType petType1, petType2;
 
 
 	@Autowired
@@ -32,8 +28,17 @@ public class PetServiceTest {
 	@Autowired
 	protected PetTypeRepository petTypeRepository;
 
+	static Stream<Arguments> localParameters() {
+		return Stream.of(
+			Arguments.of(1, "cat", "Ali"), //cache miss
+			Arguments.of(2, "dog", "Sara"), //cache miss
+			Arguments.of(1, "cat", "Ali"), //cache hit
+			Arguments.of(2, "dog", "Sara") //cache hit
+		);
+	}
+
 	@BeforeEach
-	public void setUp(){
+	public void setUp() {
 		petType1 = new PetType();
 		petType1.setName("cat");
 		petTypeRepository.save(petType1);
@@ -47,7 +52,7 @@ public class PetServiceTest {
 		pet1 = new Pet();
 		pet1.setId(1);
 		pet1.setType(petType1);
-		petService.savePet(pet1 , owner1);
+		petService.savePet(pet1, owner1);
 
 		petType2 = new PetType();
 		petType2.setName("dog");
@@ -62,27 +67,17 @@ public class PetServiceTest {
 		pet2 = new Pet();
 		pet2.setId(2);
 		pet2.setType(petType2);
-		petService.savePet(pet2 , owner2);
-
+		petService.savePet(pet2, owner2);
 	}
 
 	@ParameterizedTest
 	@MethodSource("localParameters")
-	public void findPetTest(int id , String expectedType , String expectedOwnerFirstName){
+	public void findPetTest(int id, String expectedType, String expectedOwnerFirstName) {
 
 		pet = petService.findPet(id);
 
 		assert pet.getType().getName().equals(expectedType);
 		assert pet.getOwner().getFirstName().equals(expectedOwnerFirstName);
-	}
-
-	static Stream<Arguments> localParameters() {
-		return Stream.of(
-			Arguments.of(1, "cat" , "Ali"), //cache miss
-			Arguments.of(2, "dog" , "Sara"), //cache miss
-			Arguments.of(1, "cat" , "Ali"), //cache hit
-			Arguments.of(2, "dog" , "Sara") //cache hit
-		);
 	}
 
 }
