@@ -14,6 +14,7 @@ import java.util.*;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assume.assumeTrue;
+import static org.springframework.samples.petclinic.owner.GetObjectField.getPrivateFiled;
 
 @RunWith(Theories.class)
 public class PetTest {
@@ -31,14 +32,14 @@ public class PetTest {
 									new HashSet(Arrays.asList (LocalDate.parse("2019-01-12") , LocalDate.parse("2019-02-18") , LocalDate.parse("2019-02-15")))};
 
 	@Theory
-	public void isSortingVisitsDateCorrectly(Set<LocalDate> dates){
+	public void isSortingVisitsDateCorrectly(Set<LocalDate> dates) throws IllegalAccessException {
 		assumeTrue(dates!=null);
 		List<LocalDate> dateslist = new ArrayList<>(dates);
 		List<Visit> visits = new ArrayList<>();
 
-		for(int i=0 ; i<dateslist.size() ; i++){
+		for (LocalDate localDate : dateslist) {
 			Visit visit = new Visit();
-			visit.setDate(dateslist.get(i));
+			Objects.requireNonNull(getPrivateFiled(visit, "date")).set(visit, localDate);
 			visits.add(visit);
 		}
 		pet.setVisitsInternal(visits);
