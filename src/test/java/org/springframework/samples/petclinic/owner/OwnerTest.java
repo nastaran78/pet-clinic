@@ -6,6 +6,8 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
+
+import java.lang.reflect.Field;
 import java.util.*;
 
 import static org.junit.Assume.assumeNotNull;
@@ -31,7 +33,7 @@ public class OwnerTest {
 	}
 
 	@Theory
-	public void petNameExists(Set<String> dataset, String name) {
+	public void petNameExists(Set<String> dataset, String name) throws IllegalAccessException {
 
 		assumeNotNull(dataset);
 		assumeTrue(dataset.contains(name) || dataset.contains(name.toLowerCase()));
@@ -43,14 +45,16 @@ public class OwnerTest {
 			pet.setName(s);
 			pets.add(pet);
 		}
-		owner.setPetsInternal(new HashSet<>(pets));
+		Field petsField = GetObjectField.getPrivateFiled(owner, "pets");
+		assertNotNull(petsField);
+		petsField.set(owner, new HashSet<>(pets));
 		pet = owner.getPet(name, false);
 
 		assertNotNull(pet);
 	}
 
 	@Theory
-	public void petNameNotExists(Set<String> dataset, String name) {
+	public void petNameNotExists(Set<String> dataset, String name) throws IllegalAccessException {
 
 		assumeTrue(dataset != null);
 		assumeTrue(!dataset.contains(name) && !dataset.contains(name.toLowerCase()));
@@ -62,8 +66,9 @@ public class OwnerTest {
 			pet.setName(s);
 			pets.add(pet);
 		}
-		Set<Pet> petsSet = new HashSet<>(pets);
-		owner.setPetsInternal(petsSet);
+		Field petsField = GetObjectField.getPrivateFiled(owner, "pets");
+		assertNotNull(petsField);
+		petsField.set(owner, new HashSet<>(pets));
 		pet = owner.getPet(name, false);
 
 		assertNull(pet);
