@@ -2,19 +2,20 @@ package org.springframework.samples.petclinic.owner;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 import org.junit.runner.RunWith;
 import org.mockito.*;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.samples.petclinic.utility.PetTimedCache;
 import org.slf4j.Logger;
+import org.springframework.samples.petclinic.utility.PetTimedCache;
 import org.springframework.samples.petclinic.visit.Visit;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -74,7 +75,7 @@ class PetManagerTest {
 		int ownerId = 1;
 		when(this.owners.findById(anyInt())).thenReturn(this.gorge);
 		Owner realOwner = petManager.findOwner(ownerId);
-		assertEquals( realOwner.toString(), this.gorge.toString());
+		assertEquals(realOwner.toString(), this.gorge.toString());
 	}
 
 	// Behavior - Mockito
@@ -151,7 +152,8 @@ class PetManagerTest {
 		try {
 			petManager.getOwnerPets(ownerId);
 			fail("should throw a NullPointerException");
-		} catch (NullPointerException ignored) {}
+		} catch (NullPointerException ignored) {
+		}
 		verify(log, Mockito.times(1)).info("finding the owner's pets by id {}", ownerId);
 		// ArgumentCaptor<Owner> owner = ArgumentCaptor.forClass(Owner.class);
 	}
@@ -162,7 +164,7 @@ class PetManagerTest {
 		int ownerId = 1;
 		this.gorge.addPet(this.cat);
 		when(this.owners.findById(anyInt())).thenReturn(this.gorge);
-		List<Pet> pets= petManager.getOwnerPets(ownerId);
+		List<Pet> pets = petManager.getOwnerPets(ownerId);
 		assertEquals(pets.size(), 1);
 		assertEquals(pets.get(0).toString(), this.cat.toString());
 	}
@@ -228,22 +230,6 @@ class PetManagerTest {
 		List<Visit> petVisits = petManager.getVisitsBetween(petId, startDate, endDate);
 		assertEquals(1, petVisits.size());
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }
