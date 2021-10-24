@@ -46,7 +46,6 @@ class PetManagerTest {
 		PetType cateType = new PetType();
 		cateType.setName("catType");
 		cat.setType(cateType);
-
 		MockitoAnnotations.initMocks(this);
 	}
 
@@ -106,7 +105,6 @@ class PetManagerTest {
 		verify(pets, Mockito.times(1)).get(petId);
 
 	}
-
 
 	// State
 	@Test
