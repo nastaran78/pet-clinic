@@ -2,11 +2,16 @@ package org.springframework.samples.petclinic.owner;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.junit.runner.RunWith;
 import org.mockito.*;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.samples.petclinic.utility.PetTimedCache;
 import org.slf4j.Logger;
+import org.springframework.samples.petclinic.visit.Visit;
+
+import java.time.LocalDate;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -138,6 +143,92 @@ class PetManagerTest {
 		assertEquals(this.cat.getOwner().toString(), owner.toString());
 		assertNotNull(owner.getPets());
 	}
+
+	// Behavior
+	@Test
+	public void testGetOwnerPetsException() {
+		int ownerId = 1;
+		try {
+			petManager.getOwnerPets(ownerId);
+			fail("should throw a NullPointerException");
+		} catch (NullPointerException ignored) {}
+		verify(log, Mockito.times(1)).info("finding the owner's pets by id {}", ownerId);
+		// ArgumentCaptor<Owner> owner = ArgumentCaptor.forClass(Owner.class);
+	}
+
+	// State
+	@Test
+	public void testGetOwnerPetsValidValue() {
+		int ownerId = 1;
+		this.gorge.addPet(this.cat);
+		when(this.owners.findById(anyInt())).thenReturn(this.gorge);
+		List<Pet> pets= petManager.getOwnerPets(ownerId);
+		assertEquals(pets.size(), 1);
+		assertEquals(pets.get(0).toString(), this.cat.toString());
+	}
+
+	@Test
+	public void testGetOwnerPetTypesValidValue() {
+		Owner owner = spy(Owner.class);
+		int ownerId = 1;
+		Pet pet1 = new Pet();
+		Pet pet2 = new Pet();
+		Pet pet3 = new Pet();
+		PetType petType1 = new PetType();
+		petType1.setName("petType1");
+		PetType petType2 = new PetType();
+		petType2.setName("petType2");
+		pet1.setType(petType1);
+		pet2.setType(petType2);
+		pet3.setType(petType2);
+
+		when(this.owners.findById(anyInt())).thenReturn(owner);
+		when(owner.getPets()).thenReturn(new ArrayList<>(Arrays.asList(pet1, pet2, pet3)));
+		Set<PetType> pets = petManager.getOwnerPetTypes(ownerId);
+		assertEquals(2, pets.size());
+		assertNotNull(owner.getPets());
+		assertTrue(pets.contains(pet1.getType()));
+	}
+
+	// Behavior
+	@Test
+	public void testGetOwnerPetTypesValidValueBehavior() {
+		Owner owner = mock(Owner.class);
+		int ownerId = 1;
+		when(this.owners.findById(anyInt())).thenReturn(owner);
+		when(owner.getPets()).thenReturn(new ArrayList<>());
+		Set<PetType> petTypes = petManager.getOwnerPetTypes(ownerId);
+		verify(log, Mockito.times(1)).info("finding the owner's petTypes by id {}", ownerId);
+		verify(owner, Mockito.times(1)).getPets();
+		verify(this.owners).findById(ownerId);
+		assertEquals(0, petTypes.size());
+
+	}
+
+	@Test
+	public void testGetVisitsBetween() {
+		int petId = 1;
+		LocalDate startDate = LocalDate.parse("2020-01-08");
+		LocalDate endDate = LocalDate.parse("2021-09-13");
+		when(pets.get(anyInt())).thenReturn(this.cat);
+		petManager.getVisitsBetween(petId, startDate, endDate);
+		verify(log, Mockito.times(1)).info("get visits for pet {} from {} since {}", petId, startDate, endDate);
+		verify(this.pets).get(petId);
+	}
+
+	@Test
+	public void testGetVisitsBetweenValidValue() {
+		int petId = 1;
+		Visit visit = new Visit();
+		visit.setDate(LocalDate.parse("2021-01-02"));
+		this.cat.addVisit(visit);
+		LocalDate startDate = LocalDate.parse("2020-01-01");
+		LocalDate endDate = LocalDate.parse("2022-01-13");
+		when(pets.get(anyInt())).thenReturn(this.cat);
+		List<Visit> petVisits = petManager.getVisitsBetween(petId, startDate, endDate);
+		assertEquals(1, petVisits.size());
+	}
+
 
 
 
