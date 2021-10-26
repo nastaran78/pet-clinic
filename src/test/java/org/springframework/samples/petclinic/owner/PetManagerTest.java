@@ -224,7 +224,23 @@ class PetManagerTest {
 
 	// Behavior - Stub - Classical
 	@Test
-	public void testGetVisitsBetween() {
+	public void testGetVisitsBetweenInvalidInputBehavior() {
+		int petId = 1;
+		LocalDate startDate = LocalDate.parse("2020-01-08");
+		LocalDate endDate = LocalDate.parse("2021-09-13");
+		when(pets.get(anyInt())).thenReturn(null);
+		try {
+			petManager.getVisitsBetween(petId, startDate, endDate);
+			fail("Expected to raise NullException");
+		} catch (NullPointerException e) {
+			verify(log, Mockito.times(1)).info("get visits for pet {} from {} since {}", petId, startDate, endDate);
+			verify(this.pets).get(petId);
+		}
+	}
+
+	// Behavior - Stub - Classical
+	@Test
+	public void testGetVisitsBetweenValidInputBehavior() {
 		int petId = 1;
 		LocalDate startDate = LocalDate.parse("2020-01-08");
 		LocalDate endDate = LocalDate.parse("2021-09-13");
@@ -248,5 +264,22 @@ class PetManagerTest {
 		assertEquals(1, petVisits.size());
 	}
 
+	// State - Stub - Classical
+	@Test
+	public void testGetVisitsBetweenInvalidValue() {
+		int petId = 1;
+		Visit visit = new Visit();
+		visit.setDate(LocalDate.parse("2021-01-02"));
+		this.cat.addVisit(visit);
+		LocalDate startDate = LocalDate.parse("2020-01-01");
+		LocalDate endDate = LocalDate.parse("2022-01-13");
+		when(pets.get(anyInt())).thenReturn(null);
+		List<Visit> petVisits = null;
+		try {
+			petVisits = petManager.getVisitsBetween(petId, startDate, endDate);
 
+		} catch (NullPointerException e) {
+			assertNull(petVisits);
+		}
+	}
 }
