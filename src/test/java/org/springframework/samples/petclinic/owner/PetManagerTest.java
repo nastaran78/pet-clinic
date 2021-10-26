@@ -42,14 +42,16 @@ class PetManagerTest {
 		gorge.setId(1);
 		gorge.setFirstName("Gorge");
 		gorge.setLastName("Marlin");
+
 		cat = new Pet();
 		PetType cateType = new PetType();
 		cateType.setName("catType");
 		cat.setType(cateType);
+
 		MockitoAnnotations.initMocks(this);
 	}
 
-	// Behavior
+	// Behavior - Mock - Mockito
 	@Test
 	public void testFindOwnerValidValueBehavior() {
 		int ownerId = 1;
@@ -60,24 +62,18 @@ class PetManagerTest {
 		assertEquals(1, ownerIdCaptor.getValue());
 	}
 
-	//state - Mock - Mockito
-	@Test
-	public void testFindOwnerInvalidValueState() {
-		int ownerId = 1;
-		Owner realOwner = petManager.findOwner(ownerId);
-		assertNull(realOwner);
-	}
-
-	//state - Classical
+	//state - Stub - Classical
 	@Test
 	public void testFindOwnerValidValueState() {
 		int ownerId = 1;
+		Owner realOwner1 = petManager.findOwner(ownerId);
+		assertNull(realOwner1);
 		when(this.owners.findById(anyInt())).thenReturn(this.gorge);
-		Owner realOwner = petManager.findOwner(ownerId);
-		assertEquals(realOwner.toString(), this.gorge.toString());
+		Owner realOwner2 = petManager.findOwner(ownerId);
+		assertEquals(realOwner2.toString(), this.gorge.toString());
 	}
 
-	// Behavior - Mockito
+	// Behavior - Mock - Mockito
 	@Test
 	public void testNewPetValidValue() {
 		Owner owner = mock(Owner.class);
@@ -88,7 +84,18 @@ class PetManagerTest {
 		assertTrue(pet.getValue().isNew());
 	}
 
-	// State - Mockito
+	// Behavior - Mock - Mockito
+	@Test
+	public void testNewPetInvalidValueBehavior() {
+		try {
+			petManager.newPet(null);
+			fail("Wanted to add pet for null owner!");
+		} catch (NullPointerException e) {
+			verify(log, Mockito.times(0)).info(anyString());
+		}
+	}
+
+	// State - Spy - Mockito
 	@Test
 	public void testNewPetValidValueState() {
 		Owner owner = spy(Owner.class);
@@ -96,9 +103,9 @@ class PetManagerTest {
 		assertEquals(1, owner.getPets().size());
 	}
 
-	// Behavior - Mockito
+	// Behavior - Mock - Mockito
 	@Test
-	public void testFindPetsValidValue() {
+	public void testFindPetsBehavior() {
 		int petId = 1;
 		petManager.findPet(petId);
 		verify(log, Mockito.times(1)).info("find pet by id {}", petId);
@@ -106,24 +113,20 @@ class PetManagerTest {
 
 	}
 
-	// State
+	// State - Stub - Classical
 	@Test
-	public void testFindPetInValidValue() {
+	public void testFindPetState() {
 		int petId = 1;
 		Pet pet = petManager.findPet(petId);
 		assertNull(pet);
-	}
 
-	//State
-	@Test
-	public void testFindPetValidValue() {
 		when(this.pets.get(anyInt())).thenReturn(this.cat);
-		int petId = 1;
-		Pet pet = petManager.findPet(petId);
+		pet = petManager.findPet(petId);
 		assertEquals(this.cat.getType().getName(), pet.getType().getName());
 	}
 
-	// Behavior - Classical - Mock
+
+	// Behavior - Mock - Classical
 	@Test
 	public void testSavePetValidValue() {
 		Owner owner = mock(Owner.class);
@@ -134,7 +137,21 @@ class PetManagerTest {
 		assertNull(owner.getPet(this.cat.getName()));
 	}
 
-	// State - Classical - Spy
+
+	// Behavior - Mock - Mockito
+	@Test
+	public void testSavePetInvalidValue() {
+		Owner owner = null;
+		try {
+			petManager.savePet(this.cat, owner);
+			fail("Unexpectedly created a pet with null owner!");
+		} catch (NullPointerException e) {
+			verify(this.log, Mockito.times(1)).info("save pet {}", this.cat.getId());
+			verify(this.pets, Mockito.times(0)).save(any());
+		}
+	}
+
+	// State - Spy - Classical
 	@Test
 	public void testSavePetValidValueState() {
 		Owner owner = spy(Owner.class);
@@ -143,7 +160,7 @@ class PetManagerTest {
 		assertNotNull(owner.getPets());
 	}
 
-	// Behavior
+	// Behavior - Mock - Mockito
 	@Test
 	public void testGetOwnerPetsException() {
 		int ownerId = 1;
@@ -153,10 +170,9 @@ class PetManagerTest {
 		} catch (NullPointerException ignored) {
 		}
 		verify(log, Mockito.times(1)).info("finding the owner's pets by id {}", ownerId);
-		// ArgumentCaptor<Owner> owner = ArgumentCaptor.forClass(Owner.class);
 	}
 
-	// State
+	// State - Stub - Classical
 	@Test
 	public void testGetOwnerPetsValidValue() {
 		int ownerId = 1;
@@ -167,6 +183,7 @@ class PetManagerTest {
 		assertEquals(pets.get(0).toString(), this.cat.toString());
 	}
 
+	// State - Spy - Classical
 	@Test
 	public void testGetOwnerPetTypesValidValue() {
 		Owner owner = spy(Owner.class);
@@ -190,7 +207,7 @@ class PetManagerTest {
 		assertTrue(pets.contains(pet1.getType()));
 	}
 
-	// Behavior
+	// Behavior - Stub - Mockito
 	@Test
 	public void testGetOwnerPetTypesValidValueBehavior() {
 		Owner owner = mock(Owner.class);
@@ -205,6 +222,7 @@ class PetManagerTest {
 
 	}
 
+	// Behavior - Stub - Classical
 	@Test
 	public void testGetVisitsBetween() {
 		int petId = 1;
@@ -216,6 +234,7 @@ class PetManagerTest {
 		verify(this.pets).get(petId);
 	}
 
+	// State - Stub - Classical
 	@Test
 	public void testGetVisitsBetweenValidValue() {
 		int petId = 1;
