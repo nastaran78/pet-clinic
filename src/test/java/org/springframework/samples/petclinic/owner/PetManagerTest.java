@@ -26,7 +26,7 @@ class PetManagerTest {
 	PetTimedCache pets;
 	@Mock
 	OwnerRepository owners;
-	@Mock
+	@Spy
 	Logger log;
 
 	@InjectMocks
@@ -51,7 +51,7 @@ class PetManagerTest {
 		MockitoAnnotations.initMocks(this);
 	}
 
-	// Behavior - Mock - Mockito
+	// Behavior - Mock - Mockisty
 	@Test
 	public void testFindOwnerValidValueBehavior() {
 		int ownerId = 1;
@@ -73,7 +73,7 @@ class PetManagerTest {
 		assertEquals(realOwner2.toString(), this.gorge.toString());
 	}
 
-	// Behavior - Mock - Mockito
+	// Behavior - Mock - Mockisty
 	@Test
 	public void testNewPetValidValue() {
 		Owner owner = mock(Owner.class);
@@ -84,7 +84,7 @@ class PetManagerTest {
 		assertTrue(pet.getValue().isNew());
 	}
 
-	// Behavior - Mock - Mockito
+	// Behavior - Mock - Mockisty
 	@Test
 	public void testNewPetInvalidValueBehavior() {
 		try {
@@ -95,7 +95,7 @@ class PetManagerTest {
 		}
 	}
 
-	// State - Spy - Mockito
+	// State - Spy - Mockisty
 	@Test
 	public void testNewPetValidValueState() {
 		Owner owner = spy(Owner.class);
@@ -103,7 +103,7 @@ class PetManagerTest {
 		assertEquals(1, owner.getPets().size());
 	}
 
-	// Behavior - Mock - Mockito
+	// Behavior - Mock - Mockisty
 	@Test
 	public void testFindPetsBehavior() {
 		int petId = 1;
@@ -138,7 +138,7 @@ class PetManagerTest {
 	}
 
 
-	// Behavior - Mock - Mockito
+	// Behavior - Mock - Mockisty
 	@Test
 	public void testSavePetInvalidValue() {
 		Owner owner = null;
@@ -160,7 +160,7 @@ class PetManagerTest {
 		assertNotNull(owner.getPets());
 	}
 
-	// Behavior - Mock - Mockito
+	// Behavior - Mock - Mockisty
 	@Test
 	public void testGetOwnerPetsException() {
 		int ownerId = 1;
@@ -207,7 +207,7 @@ class PetManagerTest {
 		assertTrue(pets.contains(pet1.getType()));
 	}
 
-	// Behavior - Stub - Mockito
+	// Behavior - Stub - Mockisty
 	@Test
 	public void testGetOwnerPetTypesValidValueBehavior() {
 		Owner owner = mock(Owner.class);
