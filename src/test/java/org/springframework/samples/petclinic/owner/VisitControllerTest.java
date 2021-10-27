@@ -8,20 +8,20 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.samples.petclinic.visit.Visit;
 import org.springframework.samples.petclinic.visit.VisitRepository;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.given;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import org.springframework.test.web.servlet.MockMvc;
 
 
 @SpringBootTest
@@ -44,22 +44,22 @@ class VisitControllerTest {
 
 
 	@BeforeEach
-	public void setUp(){
+	public void setUp() {
 		MockitoAnnotations.initMocks(this);
-		visitController = new VisitController(visits , pets);
+		visitController = new VisitController(visits, pets);
 		visit = new Visit();
 		result = new BeanPropertyBindingResult(visit, "visit");
 		mockMvc = MockMvcBuilders.standaloneSetup(visitController).build();
 	}
 
 	@Test
-	public void testProcessNewVisitForm_StateVerification(){
-		assertTrue("redirect:/owners/{ownerId}".equals(visitController.processNewVisitForm(visit ,result)));
+	public void testProcessNewVisitForm_StateVerification() {
+		assertTrue("redirect:/owners/{ownerId}".equals(visitController.processNewVisitForm(visit, result)));
 
-		ObjectError error = new ObjectError("visitValidation","visit not valid");
+		ObjectError error = new ObjectError("visitValidation", "visit not valid");
 		result.addError(error);
 
-		assertTrue("pets/createOrUpdateVisitForm".equals(visitController.processNewVisitForm(visit ,result)));
+		assertTrue("pets/createOrUpdateVisitForm".equals(visitController.processNewVisitForm(visit, result)));
 	}
 
 	@Test
@@ -84,12 +84,12 @@ class VisitControllerTest {
 
 	@Test
 	public void testProcessNewVisitForm_Behavior_InvalidInput() {
-		ObjectError error = new ObjectError("visitValidation","visit not valid");
+		ObjectError error = new ObjectError("visitValidation", "visit not valid");
 		result.addError(error);
 
-		visitController.processNewVisitForm(visit , result);
+		visitController.processNewVisitForm(visit, result);
 
-		verify(visits , times(0)).save(visit);
+		verify(visits, times(0)).save(visit);
 	}
 
 
