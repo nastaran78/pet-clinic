@@ -23,7 +23,6 @@ public class CustomerDependentPriceCalculatorTest {
 	PetType cat;
 	double baseCharge = 10;
 	double basePricePerPet = 100;
-	@InjectMocks
 	CustomerDependentPriceCalculator customerDependentPriceCalculator;
 
 	@Before
