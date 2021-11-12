@@ -18,6 +18,8 @@ import static org.mockito.Mockito.when;
 public class SimplePriceCalculatorTest {
 	private SimplePriceCalculator simplePriceCalculator;
 	@Mock PetType cat;
+	double baseCharge = 100;
+	double basePricePerPet = 100;
 
 	@Before
 	public void setUp() {
@@ -26,7 +28,7 @@ public class SimplePriceCalculatorTest {
 	}
 
 
-	private List<Pet> createTwoRarePets() {
+	private List<Pet> createTwoPets() {
 		Pet pet1 = new Pet();
 		pet1.setId(1);
 		pet1.setType(cat);
@@ -39,35 +41,30 @@ public class SimplePriceCalculatorTest {
 
 	@Test
 	public void testSimplePriceCalcWithRarePetsAndNewUser() {
-		List<Pet> pets = createTwoRarePets();
-		double baseCharge = 0;
-		double basePricePerPet = 1;
+		List<Pet> pets = createTwoPets();
 		UserType userType = UserType.NEW;
 		when(cat.getRare()).thenReturn(true);
 		double price = simplePriceCalculator.calcPrice(pets, baseCharge, basePricePerPet, userType);
-		assertThat(price).isEqualTo(2.28);
+		assertThat(price).isEqualTo(323.0);
 	}
 
 	@Test
 	public void testSimplePriceCalcWithRarePetsAndGoldUser() {
-		List<Pet> pets = createTwoRarePets();
-		double baseCharge = 0;
-		double basePricePerPet = 1;
+		List<Pet> pets = createTwoPets();
 		UserType userType = UserType.GOLD;
 		when(cat.getRare()).thenReturn(true);
 		double price = simplePriceCalculator.calcPrice(pets, baseCharge, basePricePerPet, userType);
-		assertThat(price).isEqualTo(2.4);
+		assertThat(price).isEqualTo(340.0);
 	}
 
 	@Test
 	public void testSimplePriceCalcWithNotRarePetsAndNewUser() {
-		List<Pet> pets = createTwoRarePets();
+		List<Pet> pets = createTwoPets();
 		when(cat.getRare()).thenReturn(false);
-		double baseCharge = 0;
-		double basePricePerPet = 1;
+
 		UserType userType = UserType.NEW;
 		double price = simplePriceCalculator.calcPrice(pets, baseCharge, basePricePerPet, userType);
-		assertThat(price).isEqualTo(1.9);
+		assertThat(price).isEqualTo(285.0);
 	}
 
 
