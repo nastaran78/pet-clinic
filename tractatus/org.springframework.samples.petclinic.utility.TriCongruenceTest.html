@@ -11,7 +11,11 @@
 
         <ul class="list-group">
             <li class="list-group-item list-group-item-primary"><b>Clause Definitions</b></li>
-            
+            <li class="list-group-item">a := t1arr[0] &lt; 0</li>
+            <li class="list-group-item">b := t1arr[0] + t1arr[1] &lt; t1arr[2]</li>
+            <li class="list-group-item">m := t1arr[0] != t2arr[0]</li>
+            <li class="list-group-item">n := t1arr[1] != t2arr[1]</li>
+            <li class="list-group-item">t := t1arr[2] != t2arr[2]</li>
         </ul>
 
         <table class="table">
@@ -24,10 +28,28 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td colspan="2"> No Report Generated </td>
-            </tr>
             
+            <tr>
+                <td>
+                    <span>UniqueTruePoint</span>
+                </td>
+                <td>
+                    <span>m + n + t‌</span>
+                </td>
+                <td>
+                    <ul>
+                        <li>DNF: m + n + t</li>
+                        <li>Implicant: m</li>
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        <li>m = false</li>
+                        <li>n = false</li>
+                        <li>t = false</li>
+                    </ul>
+                </td>
+            </tr>
             </tbody>
         </table>
     </body>

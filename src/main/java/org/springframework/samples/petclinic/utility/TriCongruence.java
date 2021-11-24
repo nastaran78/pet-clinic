@@ -8,6 +8,7 @@ public class TriCongruence {
 		double[] t1arr = {t1.getA(), t1.getB(), t1.getC()};
 		double[] t2arr = {t2.getA(), t2.getB(), t2.getC()};
 
+
 		Arrays.sort(t1arr);
 		Arrays.sort(t2arr);
 
