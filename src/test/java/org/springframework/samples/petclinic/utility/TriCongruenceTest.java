@@ -21,12 +21,20 @@ class TriCongruenceTest {
 	private static final Logger log = LoggerFactory.getLogger(TriCongruenceTest.class);
 
 	/**
-	 * TODO
-	 * explain your answer here
+	 * f = ab + cd
+	 * !f = !a!c + !a!d + !b!c + !b!d
+	 *
+	 * CUTPNFP test requirements: {TTFF, FFTT, TFFF, FTFF, FFTF, FFFT}
+	 * UTPC test requirements: ab:{TTFF, TTFT, TTTF}  cd:{FFTT, FTTT, TFTT}  !a!c:{FTFF,FFFT,FTFT}
+	 *						  !a!d:{FTFF,FFTF,FTTF}	 !b!c:{TFFF,FFFT,TFFT}   !b!d:{TFFF,FFTF,TFTF}
+	 *						  UTPC:{TTFF,TTFT,TTTF,FFTT,FTTT,TFTT,FTFF,FFFT,FTFT,FFTF,FTTF,TFFF,TFFT,TFTF}
+	 *
+	 *	CUTPNFP has UTPC test requirement for implicants in f only but UTPC requires UTPC test requirements for both f and !f
+	 *  So CUTPNFP doesnt subsume UTPC. In the example above UTPC's requirements are not a subset of CUTPNFP's requirements.
 	 */
 	private static boolean questionTwo(boolean a, boolean b, boolean c, boolean d, boolean e) {
 		boolean predicate = false;
-//		predicate = a predicate with any number of clauses
+		predicate = a&&b || c&&d;
 		return predicate;
 	}
 
