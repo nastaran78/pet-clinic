@@ -25,9 +25,9 @@ class TriCongruenceTest {
 	 * !f = !a!c + !a!d + !b!c + !b!d
 	 *
 	 * CUTPNFP test requirements: {TTFF, FFTT, TFFF, FTFF, FFTF, FFFT}
-	 * UTPC test requirements: ab:{TTFF, TTFT, TTTF}  cd:{FFTT, FTTT, TFTT}  !a!c:{FTFF,FFFT,FTFT}
-	 *						  !a!d:{FTFF,FFTF,FTTF}	 !b!c:{TFFF,FFFT,TFFT}   !b!d:{TFFF,FFTF,TFTF}
-	 *						  UTPC:{TTFF,TTFT,TTTF,FFTT,FTTT,TFTT,FTFF,FFFT,FTFT,FFTF,FTTF,TFFF,TFFT,TFTF}
+	 * UTPC test requirements: ab:{TTFF, TTFT, TTTF}  cd:{FFTT, FTTT, TFTT}  !a!c:{FTFT}
+	 *						  !a!d:{FTTF}	 		 !b!c:{TFFT}   			!b!d:{TFTF}
+	 *						  UTPC:{TTFF, TTFT, TTTF, FFTT, FTTT, TFTT, FTFT, FTTF, TFFT, TFTF}
 	 *
 	 *	CUTPNFP has UTPC test requirement for implicants in f only but UTPC requires UTPC test requirements for both f and !f
 	 *  So CUTPNFP doesnt subsume UTPC. In the example above UTPC's requirements are not a subset of CUTPNFP's requirements.
