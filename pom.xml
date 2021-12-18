@@ -320,6 +320,24 @@
           </dependency>
         </dependencies>
       </plugin>
+
+      <plugin>
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest-maven</artifactId>
+        <version>1.6.5</version>
+        <configuration>
+          <targetClasses>
+            <param>org.springframework.samples.petclinic.utility.PriceCalculator</param>
+          </targetClasses>
+          <targetTests>
+            <param>org.springframework.samples.petclinic.utility.PriceCalculatorTest</param>
+          </targetTests>
+        </configuration>
+      </plugin>
+
+
+
+
     </plugins>
   </build>
 
