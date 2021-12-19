@@ -39,7 +39,6 @@ public class PriceCalculator {
 			} else {
 				discountCounter = discountCounter + 1;
 			}
-
 			if (discountCounter >= DISCOUNT_MIN_SCORE) {
 				if (daysFromLastVisit < 100) {
 					totalPrice = (totalPrice * DISCOUNT_PRE_VISIT) + baseCharge;
