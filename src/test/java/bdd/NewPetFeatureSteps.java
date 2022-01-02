@@ -30,7 +30,7 @@ public class NewPetFeatureSteps {
 	private Pet newPet;
 
 
-	@Given("There is a pet owner called {string} {string}")
+	@Given("There is an owner called {string} {string}")
 	public void there_is_a_pet_owner_called(String firstName, String lastName) {
 		george = new Owner();
 		george.setFirstName(firstName);
